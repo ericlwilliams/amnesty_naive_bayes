@@ -81,10 +81,14 @@ train.wofu.occurrence <- sapply(1:nrow(train.wofu.matrix),
 # for each row (term), calculate the fraction of that term wrt all the other terms
 train.wofu.density <- train.wofu.df$frequency/sum(train.wofu.df$frequency)
 
+
+
 # add to df
 train.wofu.df[,`:=`(density=train.wofu.density,occurrence=train.wofu.occurrence)]
 
-
+h.wofu.occur<-ggplot(train.wofu.df,aes(x=occurrence))+geom_histogram()
+ggsave(plot=h.wofu.occur,filename= file.path("./figures/latest/h_wofu_occur.pdf"))
+browser()
 # write classifier for single messege
 
 classify.ua <- function(msg.body, training.df, prior=0.5, cst=1e-4){
