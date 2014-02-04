@@ -30,8 +30,13 @@ get.tdm <- function(doc.vec) {
 }
 
 # get train tdms
-train.wfu.tdm <- get.tdm(train.wfu.body)
-train.wofu.tdm <- get.tdm(train.wofu.body)
+# train.wfu.tdm <- get.tdm(train.wfu.body)
+# train.wofu.tdm <- get.tdm(train.wofu.body)
+
+sparsity=0.95
+train.wfu.tdm <- removeSparseTerms(get.tdm(train.wfu.body),sparsity)
+train.wofu.tdm <- removeSparseTerms(get.tdm(train.wofu.body),sparsity)
+
 
 # convert to matrix
 train.wfu.matrix <- as.matrix(train.wfu.tdm)
@@ -88,11 +93,11 @@ train.wofu.df[,`:=`(density=train.wofu.density,occurrence=train.wofu.occurrence)
 
 h.wofu.occur<-ggplot(train.wofu.df,aes(x=occurrence))+geom_histogram()
 ggsave(plot=h.wofu.occur,filename= file.path("./figures/latest/h_wofu_occur.pdf"))
-browser()
+
 # write classifier for single messege
 
 classify.ua <- function(msg.body, training.df, prior=0.5, cst=1e-4){
-	msg.tdm <- get.tdm(msg.body)
+	msg.tdm <- removeSparseTerms(get.tdm(msg.body),sparsity)
 	msg.freq <- rowSums(as.matrix(msg.tdm))
 	# find intersections of words
 	msg.match <- intersect(names(msg.freq),training.df$term)

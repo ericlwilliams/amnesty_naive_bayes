@@ -22,6 +22,8 @@ id.counts <- data.table(count(ua.dt,"id"))
 id.counts[,wfu:=(freq!=1)]
 # ad to dt
 ua.dt<-merge(ua.dt,id.counts[2:nrow(id.counts),],by="id")
+
+
 # with and without followup
 ua.wfu.dt<-ua.dt[which(wfu)]
 ua.wofu.dt<-ua.dt[which(!wfu)]
